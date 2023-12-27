@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>GitHub Projects</title>
+</head>
+
+<body>
+
+    <div class="loading" id="loading">Loading...</div>
+
+    <div class="projects__content grid filters__active" data-content id="projects">
+        <!-- GitHub projects will be dynamically added here -->
+    </div>
+
+    <button id="loadMoreBtn">Load More</button>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingDiv = document.getElementById('loading');
+            const projectsContainer = document.getElementById('projects');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            let repoData = []; // To store all repository data
+            let projectsToShow = 20; // Initial number of projects to show
+
+            // Show loading animation while waiting for the HTML page to load
+            loadingDiv.style.display = 'block';
+
+            // Make a request to the GitHub API to get user data
+            fetch('https://api.github.com/users/tas33n')
+                .then(response => response.json())
+                .then(data => {
+                    // Hide loading animation after the HTML page is loaded
+                    loadingDiv.style.display = 'none';
+
+                    // Update profile information
+                    document.getElementById('profileImage').src = data.avatar_url;
+                    document.querySelector('.profile__name').innerText = data.name || 'Farhan Isteak Taeen';
+                    document.querySelector('.profile__profession').innerText = data.bio || 'Fullstack Web developer.';
+                    document.getElementById('YearsOfWork').innerText = Math.floor((new Date() - new Date(data.created_at)) / (1000 * 60 * 60 * 24 * 365.25)).toString();
+                    document.getElementById('CompleteProjects').innerText = data.public_repos;
+
+                    // Animate counter
+                    animateCounter('satisfiedCustomers');
+                })
+                .catch(error => {
+                    console.error('Error fetching GitHub data:', error);
+                    loadingDiv.innerText = 'Error loading data.';
+                });
+
+            // Make an API call to get repository data
+            fetch('https://api.github.com/users/tas33n/repos')
+                .then(response => response.json())
+                .then(data => {
+                    // Sort the projects by updated_at in descending order
+                    repoData = data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                    // Display the initial 20 projects
+                    displayProjects(projectsToShow);
+                })
+                .catch(error => {
+                    console.error('Error fetching GitHub projects:', error);
+                    loadingDiv.innerText = 'Error loading projects.';
+                });
+
+            // Load more button event listener
+            loadMoreBtn.addEventListener('click', function() {
+                projectsToShow += 20; // Increase the number of projects to show
+                displayProjects(projectsToShow);
+            });
+
+            function displayProjects(count) {
+                // Clear existing projects
+                projectsContainer.innerHTML = '';
+
+                // Display projects up to the specified count
+                repoData.slice(0, count).forEach(project => {
+                    const article = document.createElement('article');
+                    article.classList.add('projects__card');
+
+                    // You can customize the HTML structure as needed
+                    article.innerHTML = `
+                <img src="https://opengraph.githubassets.com/92493f06109f0a5f86a8c2a7fec2bc5643fad91d39321607c4f16ecb59e48df5/${project.full_name}" alt="" class="projects__img">
+                <div class="projects__modal">
+                    <div>
+                        <span class="projects__subtitle">${project.name}</span>
+                        <h3 class="projects__title">${project.description || 'No description available'}</h3>
+                        <a href="${project.html_url}" class="projects__button button button__small" target="_blank">
+                            <i class="ri-link"></i>
+                        </a>
+                    </div>
+                </div>
+            `;
+
+                    projectsContainer.appendChild(article);
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>

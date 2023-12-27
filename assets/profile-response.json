@@ -1,0 +1,26 @@
+{
+  "data": {
+    "user": {
+      "name": "Tas33n",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/55633040?u=a9337697fa79b134a3a261541870a9ccf78efb40&v=4",
+      "bio": "Full-stack wizard, crafting websites, bots, and APIs that make magic happen...",
+      "company": "@misfitsDEV",
+      "location": "Bangladesh",
+      "createdAt": "2019-09-21T17:07:10Z",
+      "updatedAt": "2023-12-27T18:12:37Z",
+      "websiteUrl": "https://tas33n.github.io/",
+      "repositories": {
+        "totalCount": 297
+      },
+      "followers": {
+        "totalCount": 37
+      },
+      "following": {
+        "totalCount": 13
+      },
+      "starredRepositories": {
+        "totalCount": 82
+      }
+    }
+  }
+}
