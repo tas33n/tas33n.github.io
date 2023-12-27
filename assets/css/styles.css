@@ -196,6 +196,10 @@ body.dark-theme {
   font-weight: 500;
   color: var(--text-color);
   margin-bottom: 1rem;
+  max-width: 300px;
+  text-align: center;
+  margin: auto;
+  padding: 0px 0 10px 0;
 }
 
 .profile__social {
