@@ -1,287 +1,1046 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tas33n | Full-Stack Wizard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        cursor: none;
+      }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      :root {
+        --primary: #00ffff;
+        --secondary: #ff00ff;
+        --accent: #ffff00;
+        --dark: #0a0a0f;
+        --glass: rgba(10, 10, 15, 0.7);
+      }
 
-    <!--=============== FAVICON ===============-->
-    <link rel="shortcut icon" href="assets/img/ico.ico" type="image/x-icon">
+      body {
+        font-family: "Courier New", monospace;
+        background: #000;
+        color: #fff;
+        overflow-x: hidden;
+        position: relative;
+      }
 
-    <!-- Primary Meta Tags -->
-    <meta property="url" content="https://tas33n.github.io/index.html" />
-    <meta property="type" content="website" />
-    <meta property="title" content="Tas33n" />
-    <meta property="description" content="Full-stack wizard, crafting websites, bots, and APIs that make magic happen...." />
-    <meta property="image" content="https://tas33n.github.io/assets/img/tas33n-preview.png" />
-    <meta name="Keywords" content="SMS BOMBING, tasee, tas33, farhan isteak taseen, webdevloper, noobie dev, bangladeshi website maker, inboxkiller, CALL BOMBING, SMS BOMB BD, SMS BOMBING BANGLADESH,  KILL THE BOX, FREE SMS, sms sender, call , free call, auto message sender, misfitsdev, misfitsdev.co, misfits api, chika bot, chika messenger bot, sms spoofer">
-    <meta name="p:domain_verify" content="af68113d8465834ea21b93d527e571de"/>
-    <!-- Open Graph / Facebook -->
-    <meta property="og:url" content="https://tas33n.github.io/index.html" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Tas33n" />
-    <meta property="og:description" content="Full-stack wizard, crafting websites, bots, and APIs that make magic happen...." />
-    <meta property="og:image" content="https://tas33n.github.io/assets/img/tas33n-preview.png" />
-    <meta property="og:fb:app_id" content="636837923919747" />
+      /* Custom Cursor */
+      .cursor {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--primary);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        transition: all 0.1s ease;
+        animation: cursorPulse 2s infinite;
+      }
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://tas33n.github.io/">
-    <meta property="twitter:title" content="Tas33n">
-    <meta property="twitter:description" content="Full-stack wizard, crafting websites, bots, and APIs that make magic happen....">
-    <meta property="og:Keywords" content="SMS BOMBING, CALL BOMBING, SMS BOMB BD, SMS BOMBING BANGLADESH,Inboxkiller, KILL THE BOX">
-    <meta property="twitter:image" content="/assets/img/tas33n-preview.png">
+      .cursor-follower {
+        width: 40px;
+        height: 40px;
+        border: 1px solid rgba(0, 255, 255, 0.3);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9998;
+        transition: all 0.3s ease;
+      }
 
-    <!--=============== REMIX ICONS ===============-->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+      @keyframes cursorPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+      }
 
-    <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="assets/css/styles.css">
+      /* 3D Canvas */
+      #canvas-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
 
-    <title>Taseen</title>
-</head>
+      /* Hero Section */
+      .hero {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background: radial-gradient(
+          circle at center,
+          rgba(0, 255, 255, 0.1),
+          transparent
+        );
+      }
 
-<body>
-    <!--=============== HEADER ===============-->
-    <header class="profile container">
-        <!-- Theme button -->
-        <i class="ri-moon-line change-theme" id="theme-button"></i>
+      .glitch-container {
+        text-align: center;
+        z-index: 10;
+        animation: float 6s ease-in-out infinite;
+      }
 
-        <div class="profile__container grid">
-            <div class="profile__data">
-                <div class="profile__border">
-                    <div class="profile__perfil">
-                        <img id="profileImage" src="assets/img/tas33n.jpeg" alt="" style="/* height: 104px; */width: 120px;">
-                    </div>
-                </div>
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
 
-                <h2 class="profile__name">Farhan Isteak Taseen</h2>
-                <h3 class="profile__profession">Web developer</h3>
+      h1 {
+        font-size: 5rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        position: relative;
+        animation: glitch 2s infinite;
+      }
 
-                <ul class="profile__social">
-                    <a href="https://www.instagram.com/" target="_blank" class="profile__social-link">
-                        <i class="ri-instagram-line"></i>
-                    </a>
-                    <a href="https://fb.com//" target="_blank" class="profile__social-link">
-                        <i class="ri-facebook-box-line"></i>
-                    </a>
-                    <a href="https://github.com/" target="_blank" class="profile__social-link">
-                        <i class="ri-github-line"></i>
-                    </a>
-                </ul>
-            </div>
+      @keyframes glitch {
+        0%,
+        100% {
+          text-shadow: 2px 0 var(--primary), -2px 0 var(--secondary),
+            0 0 20px var(--primary);
+        }
+        50% {
+          text-shadow: -2px 0 var(--secondary), 2px 0 var(--primary),
+            0 0 30px var(--secondary);
+        }
+      }
 
-            <div class="profile__info grid">
-                <div class="profile__info-group">
-                    <h3 class="profile__info-number" id="YearsOfWork">4</h3>
-                    <p class="profile__info-description">
-                        Years of <br> work
-                    </p>
-                </div>
-                <div class="profile__info-group">
-                    <h3 class="profile__info-number" id="CompleteProjects">200</h3>
-                    <p class="profile__info-description">
-                        Completed <br> projects
-                    </p>
-                </div>
-                <div class="profile__info-group">
-                    <h3 class="profile__info-number" id="satisfiedCustomers">111</h3>
-                    <p class="profile__info-description">Satisfied <br> customers</p>
-                </div>
-            </div>
+      .tagline {
+        font-size: 1.5rem;
+        margin-top: 20px;
+        color: var(--primary);
+        opacity: 0.9;
+        animation: fadeInUp 2s ease;
+      }
 
-            <div class="profile__buttons">
-                <!-- Insert your CV -->
-                <a href="https://t.me/lamb3rt" class="button">
-                    Contact <i class="ri-node-tree"></i>
-                </a>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 0.9;
+          transform: translateY(0);
+        }
+      }
 
-                <div class="profile__buttons-small">
-                    <!-- Insert a real number plus country code -->
-                    <a href="https://t.me/lamb3rt" target="_blank" class="button button__small button__gray">
-                        <i class="ri-telegram-line"></i>
-                    </a>
-                    <!-- Insert your brand name or profile -->
-                    <a href="https://m.me/" target="_blank" class="button button__small button__gray">
-                        <i class="ri-messenger-line"></i>
-                    </a>
-                </div>
-            </div>
+      /* Sections */
+      .section {
+        min-height: 100vh;
+        padding: 100px 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .container {
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      /* Glass Cards */
+      .glass-card {
+        background: var(--glass);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 255, 255, 0.3);
+        border-radius: 20px;
+        padding: 40px;
+        margin: 30px 0;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      /* Remove 3D hover for glass-card and project-card */
+      .glass-card:hover,
+      .project-card:hover {
+        transform: translateY(-10px); /* simple lift */
+        border-color: var(--primary);
+        box-shadow: 0 20px 40px rgba(0, 255, 255, 0.3),
+          inset 0 0 60px rgba(0, 255, 255, 0.1);
+      }
+
+      /* Keep 3D hover ONLY for skill items */
+      .skill-item:hover {
+        transform: scale(1.1) rotate(5deg);
+        border-color: var(--accent);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 0, 0.2),
+          rgba(0, 255, 255, 0.2)
+        );
+      }
+      .glass-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(0, 255, 255, 0.1),
+          transparent
+        );
+        transform: rotate(45deg);
+        transition: all 0.5s ease;
+        opacity: 0;
+      }
+
+      .glass-card:hover::before {
+        animation: shimmer 0.5s ease;
+        opacity: 1;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+        100% {
+          transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
+      }
+
+      /* Skills Grid */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+      }
+
+      .skill-item {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 255, 255, 0.1),
+          rgba(255, 0, 255, 0.1)
+        );
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        border: 1px solid rgba(0, 255, 255, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .skill-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      /* Projects Carousel */
+      .projects-container {
+        display: flex;
+        gap: 30px;
+        overflow-x: auto;
+        padding: 20px 0;
+        scroll-snap-type: x mandatory;
+      }
+
+      .project-card {
+        min-width: 350px;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 0, 255, 0.1),
+          rgba(0, 255, 255, 0.1)
+        );
+        border-radius: 15px;
+        padding: 30px;
+        border: 2px solid rgba(255, 0, 255, 0.3);
+        scroll-snap-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .project-card:hover {
+        transform: scale(1.05) rotateY(10deg);
+        box-shadow: 0 0 50px rgba(255, 0, 255, 0.5);
+      }
+
+      .project-title {
+        font-size: 1.5rem;
+        color: var(--secondary);
+        margin-bottom: 15px;
+      }
+
+      /* Contact Section */
+      .contact-links {
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        margin-top: 30px;
+      }
+
+      .contact-link {
+        display: inline-block;
+        padding: 15px 30px;
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
+        border-radius: 50px;
+        text-decoration: none;
+        color: #000;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .contact-link:hover {
+        transform: scale(1.1) rotate(-5deg);
+        box-shadow: 0 0 30px var(--primary);
+      }
+
+      /* Navigation */
+      .nav {
+        position: fixed;
+        top: 50%;
+        right: 30px;
+        transform: translateY(-50%);
+        z-index: 100;
+      }
+
+      .nav-dot {
+        width: 15px;
+        height: 15px;
+        border: 2px solid var(--primary);
+        border-radius: 50%;
+        margin: 20px 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: transparent;
+      }
+
+      .nav-dot:hover,
+      .nav-dot.active {
+        background: var(--primary);
+        box-shadow: 0 0 20px var(--primary);
+        transform: scale(1.5);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 3rem;
+        }
+        .section {
+          padding: 50px 20px;
+        }
+        .projects-container {
+          flex-direction: column;
+        }
+        .project-card {
+          min-width: 100%;
+        }
+        .contact-links {
+          flex-direction: column;
+        }
+        .nav {
+          display: none;
+        }
+      }
+
+      /* Loading Screen */
+      .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        transition: opacity 1s ease;
+      }
+
+      .loading-text {
+        font-size: 2rem;
+        color: var(--primary);
+        animation: pulse 1s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      /* Particle effect */
+      .particle {
+        position: fixed;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 9997;
+      }
+
+      @keyframes particle-animation {
+        0% {
+          transform: translate(0, 0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(var(--x), var(--y)) scale(0);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading">
+      <div class="loading-text">INITIALIZING...</div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- 3D Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-dot active" data-section="hero"></div>
+      <div class="nav-dot" data-section="about"></div>
+      <div class="nav-dot" data-section="skills"></div>
+      <div class="nav-dot" data-section="projects"></div>
+      <div class="nav-dot" data-section="contact"></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+      <div class="glitch-container">
+        <h1>TAS33N</h1>
+        <p class="tagline">Full-Stack Wizard | Open-Source Enthusiast</p>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="glass-card">
+          <h2
+            style="
+              font-size: 2.5rem;
+              margin-bottom: 20px;
+              color: var(--primary);
+            "
+          >
+            // ABOUT ME
+          </h2>
+          <p style="font-size: 1.2rem; line-height: 1.8">
+            I'm a passionate full-stack developer crafting websites, bots, and
+            APIs that make magic happen. Currently diving deep into the realms
+            of Node.js, React.js, Next.js, and Electron.js. My mission? Building
+            innovative solutions that push the boundaries of what's possible in
+            the digital world.
+          </p>
+          <p
+            style="
+              font-size: 1.1rem;
+              line-height: 1.8;
+              margin-top: 20px;
+              color: var(--secondary);
+            "
+          >
+            🔭 Working on cutting-edge projects<br />
+            🌱 Learning modern JavaScript frameworks<br />
+            👯 Open to collaborate on PHP & Node.js projects<br />
+            💡 Transforming ideas into reality, one line of code at a time
+          </p>
         </div>
-    </header>
+      </div>
+    </section>
 
-    <!--=============== MAIN ===============-->
-    <main class="main">
-        <section class="filters container">
-            <!--=============== FILTERS TABS ===============-->
-            <ul class="filters__content">
-                <!-- <button class="filters__button filter-tab-active" data-target="#projects">
-                    Projects
-                </button> -->
-                <button class="filters__button">
-                    Skills
-                </button>
-            </ul>
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+      <div class="container">
+        <h2
+          style="
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-align: center;
+          "
+        >
+          // TECH STACK
+        </h2>
+        <div class="skills-grid">
+          <div class="skill-item">
+            <div class="skill-icon">⚡</div>
+            <div>JavaScript</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">⚛️</div>
+            <div>React.js</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">🔷</div>
+            <div>Node.js</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">▲</div>
+            <div>Next.js</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">🔌</div>
+            <div>Electron.js</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">🐘</div>
+            <div>PHP</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">🎨</div>
+            <div>HTML/CSS</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">🤖</div>
+            <div>Bot Development</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">🔧</div>
+            <div>API Design</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">📱</div>
+            <div>Full-Stack</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">🚀</div>
+            <div>Open Source</div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-icon">💾</div>
+            <div>Git</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <div class="filters__sections">
-                <!--=============== SKILLS ===============-->
-                <div class="skills__content grid filters__active" data-content id="skills">
-                    <div class="skills__area">
-                        <h3 class="skills__title">Frontend Developer</h3>
-
-                        <div class="skills__box">
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">HTML</h3>
-                                        <span class="skills__level">Basic</span>
-                                    </div>
-                                </div>
-
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">CSS</h3>
-                                        <span class="skills__level">Advanced</span>
-                                    </div>
-                                </div>
-
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">JavaScript</h3>
-                                        <span class="skills__level">Intermediate</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">React</h3>
-                                        <span class="skills__level">Intermediate</span>
-                                    </div>
-                                </div>
-
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">Bootstrap</h3>
-                                        <span class="skills__level">Intermediate</span>
-                                    </div>
-                                </div>
-
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">Git</h3>
-                                        <span class="skills__level">Intermediate</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="skills__area">
-                        <h3 class="skills__title">Backend Developer</h3>
-
-                        <div class="skills__box">
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">PHP</h3>
-                                        <span class="skills__level">Intermediate</span>
-                                    </div>
-                                </div>
-
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">MySQL</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">Firebase</h3>
-                                        <span class="skills__level">Intermediate</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">Python</h3>
-                                        <span class="skills__level">Basic</span>
-                                    </div>
-                                </div>
-
-                                <div class="skills__data">
-                                    <i class="ri-checkbox-circle-line"></i>
-
-                                    <div>
-                                        <h3 class="skills__name">Node Js</h3>
-                                        <span class="skills__level">Intermediate</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--=============== FILTERS TABS ===============-->
-                <ul class="filters__content">
-                    <button class="filters__button">
-                        Projects
-                    </button>
-                </ul>
-
-                <div class="loading" id="loading">Loading...</div>
-
-                <!--=============== PROJECTS ===============-->
-                <div class="projects__content grid filters__active" data-content id="projects">
-
-                </div>
-
-                <ul class="filters__content">
-                    <button class="filters__button" id="loadMoreBtn">
-                        Load More
-                    </button>
-                </ul>
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+      <div class="container">
+        <h2
+          style="
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-align: center;
+          "
+        >
+          // PROJECTS
+        </h2>
+        <div class="projects-container">
+          <div class="project-card">
+            <h3 class="project-title">InstaSaver</h3>
+            <p>
+              A Tampermonkey userscript that adds download functionality to
+              Instagram posts, enabling easy media downloads from the web app.
+            </p>
+            <div style="margin-top: 20px; color: var(--accent)">
+              #JavaScript #Userscript #WebExtension
             </div>
-        </section>
-    </main>
+          </div>
+          <div class="project-card">
+            <h3 class="project-title">Telegram Invite Widget</h3>
+            <p>
+              A web application for creating customizable Telegram group or
+              channel invite widgets with modern UI components.
+            </p>
+            <div style="margin-top: 20px; color: var(--accent)">
+              #WebApp #Telegram #API
+            </div>
+          </div>
+          <div class="project-card">
+            <h3 class="project-title">DeOldify Advance</h3>
+            <p>
+              Deep Learning project for colorizing and restoring old images and
+              videos using advanced neural networks.
+            </p>
+            <div style="margin-top: 20px; color: var(--accent)">
+              #AI #DeepLearning #ImageProcessing
+            </div>
+          </div>
+          <div class="project-card">
+            <h3 class="project-title">Saikou</h3>
+            <p>
+              An Anilist-only client that lets you stream and download Anime &
+              Manga with a sleek interface.
+            </p>
+            <div style="margin-top: 20px; color: var(--accent)">
+              #Streaming #API #Mobile
+            </div>
+          </div>
+          <div class="project-card">
+            <h3 class="project-title">SMS Sender</h3>
+            <p>
+              A simple yet effective SMS sender application with API integration
+              for automated messaging.
+            </p>
+            <div style="margin-top: 20px; color: var(--accent)">
+              #API #Automation #Messaging
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <!--=============== FOOTER ===============-->
-    <footer class="footer container">
-        <span class="footer__copy">
-            &#169; Tas33n. All rigths reserved || <a href="https://misfitsdev.co/" style="color: var(--text-color-light);"> MisfitsDEV </a> || <a href="/privacy.html" style="color: var(--text-color-light);"> Privacy & Policy </a>
-        </span>
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="glass-card" style="text-align: center">
+          <h2
+            style="
+              font-size: 2.5rem;
+              margin-bottom: 20px;
+              color: var(--primary);
+            "
+          >
+            // CONNECT
+          </h2>
+          <p style="font-size: 1.3rem; margin-bottom: 30px">
+            Let's build something amazing together!
+          </p>
+          <div class="contact-links">
+            <a
+              href="https://github.com/tas33n"
+              target="_blank"
+              class="contact-link"
+              >GitHub</a
+            >
+            <a
+              href="https://tas33n.github.io/"
+              target="_blank"
+              class="contact-link"
+              >Website</a
+            >
+            <a
+              href="#"
+              onclick="alert(atob('aHR0cHM6Ly90Lm1lL2xhbWIzcnQ='))"
+              class="contact-link"
+              >Telegram</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
 
-    </footer>
+    <script>
+      // Three.js Setup
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document
+        .getElementById("canvas-container")
+        .appendChild(renderer.domElement);
 
-    <!--=============== SCROLLREVEAL ===============-->
-    <script src="assets/js/scrollreveal.min.js"></script>
+      // Create geometric shapes
+      const geometries = [];
+      const materials = [];
+      const meshes = [];
 
-    <!--=============== MAIN JS ===============-->
-    <script src="assets/js/main.js"></script>
+      // Create floating cubes
+      for (let i = 0; i < 20; i++) {
+        const geometry = new THREE.BoxGeometry(
+          Math.random() * 2,
+          Math.random() * 2,
+          Math.random() * 2
+        );
+        const material = new THREE.MeshBasicMaterial({
+          color: Math.random() > 0.5 ? 0x00ffff : 0xff00ff,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.3,
+        });
+        const mesh = new THREE.Mesh(geometry, material);
 
-</body>
+        mesh.position.x = (Math.random() - 0.5) * 30;
+        mesh.position.y = (Math.random() - 0.5) * 30;
+        mesh.position.z = (Math.random() - 0.5) * 30;
 
+        mesh.rotation.x = Math.random() * Math.PI;
+        mesh.rotation.y = Math.random() * Math.PI;
+
+        mesh.userData = {
+          rotationSpeedX: (Math.random() - 0.5) * 0.01,
+          rotationSpeedY: (Math.random() - 0.5) * 0.01,
+          floatSpeed: Math.random() * 0.01 + 0.005,
+          floatAmplitude: Math.random() * 2 + 1,
+        };
+
+        scene.add(mesh);
+        meshes.push(mesh);
+      }
+
+      // Create particle system
+      const particlesGeometry = new THREE.BufferGeometry();
+      const particlesCnt = 5000;
+      const posArray = new Float32Array(particlesCnt * 3);
+
+      for (let i = 0; i < particlesCnt * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 50;
+      }
+
+      particlesGeometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(posArray, 3)
+      );
+      const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.005,
+        color: 0x00ffff,
+        transparent: true,
+        opacity: 0.8,
+      });
+
+      const particlesMesh = new THREE.Points(
+        particlesGeometry,
+        particlesMaterial
+      );
+      scene.add(particlesMesh);
+
+      // Create central torus
+      const torusGeometry = new THREE.TorusGeometry(5, 1, 16, 100);
+      const torusMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffff00,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.4,
+      });
+      const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+      scene.add(torus);
+
+      camera.position.z = 15;
+
+      // Mouse tracking
+      let mouseX = 0;
+      let mouseY = 0;
+
+      document.addEventListener("mousemove", (e) => {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+      });
+
+      // Animation loop
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Rotate meshes
+        meshes.forEach((mesh, index) => {
+          mesh.rotation.x += mesh.userData.rotationSpeedX;
+          mesh.rotation.y += mesh.userData.rotationSpeedY;
+          mesh.position.y +=
+            Math.sin(Date.now() * mesh.userData.floatSpeed) *
+            mesh.userData.floatAmplitude *
+            0.01;
+        });
+
+        // Rotate torus
+        torus.rotation.x += 0.005;
+        torus.rotation.y += 0.005;
+
+        // Rotate particles
+        particlesMesh.rotation.y += 0.0005;
+
+        // Camera movement based on mouse
+        camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
+        camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
+        camera.lookAt(scene.position);
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      // Custom cursor
+      const cursor = document.querySelector(".cursor");
+      const follower = document.querySelector(".cursor-follower");
+
+      document.addEventListener("mousemove", (e) => {
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+
+        setTimeout(() => {
+          follower.style.left = e.clientX - 10 + "px";
+          follower.style.top = e.clientY - 10 + "px";
+        }, 100);
+      });
+
+      // Particle effect on click
+      document.addEventListener("click", (e) => {
+        createParticles(e.clientX, e.clientY);
+      });
+
+      function createParticles(x, y) {
+        for (let i = 0; i < 10; i++) {
+          const particle = document.createElement("div");
+          particle.classList.add("particle");
+          particle.style.left = x + "px";
+          particle.style.top = y + "px";
+          particle.style.width = "5px";
+          particle.style.height = "5px";
+          particle.style.background = `hsl(${
+            Math.random() * 60 + 180
+          }, 100%, 50%)`;
+          particle.style.borderRadius = "50%";
+
+          const destinationX = (Math.random() - 0.5) * 200;
+          const destinationY = (Math.random() - 0.5) * 200;
+
+          particle.style.setProperty("--x", destinationX + "px");
+          particle.style.setProperty("--y", destinationY + "px");
+          particle.style.animation = "particle-animation 1s ease-out forwards";
+
+          document.body.appendChild(particle);
+
+          setTimeout(() => {
+            particle.remove();
+          }, 1000);
+        }
+      }
+
+      // Navigation
+      const navDots = document.querySelectorAll(".nav-dot");
+      const sections = document.querySelectorAll(".section, .hero");
+
+      navDots.forEach((dot) => {
+        dot.addEventListener("click", () => {
+          const sectionId = dot.dataset.section;
+          const section = document.getElementById(sectionId);
+          section.scrollIntoView({ behavior: "smooth" });
+        });
+      });
+
+      // Update active navigation dot on scroll
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (scrollY >= sectionTop - sectionHeight / 3) {
+            current = section.getAttribute("id");
+          }
+        });
+
+        navDots.forEach((dot) => {
+          dot.classList.remove("active");
+          if (dot.dataset.section === current) {
+            dot.classList.add("active");
+          }
+        });
+      });
+
+      // Remove loading screen
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          const loading = document.getElementById("loading");
+          loading.style.opacity = "0";
+          setTimeout(() => {
+            loading.style.display = "none";
+          }, 1000);
+        }, 1500);
+      });
+
+      // Resize handler
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      // Parallax effect on scroll
+      window.addEventListener("scroll", () => {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelector(".glitch-container");
+        if (parallax) {
+          parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+        }
+      });
+
+      // Interactive hover effects
+      // Interactive hover effects (apply only to skill-item)
+      const cards = document.querySelectorAll(".skill-item");
+
+      cards.forEach((card) => {
+        card.addEventListener("mouseenter", function (e) {
+          this.style.transform =
+            "perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(50px)";
+        });
+
+        card.addEventListener("mouseleave", function (e) {
+          this.style.transform =
+            "perspective(1000px) rotateX(0) rotateY(0) translateZ(0)";
+        });
+
+        card.addEventListener("mousemove", function (e) {
+          const rect = this.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateX = (y - centerY) / 10;
+          const rotateY = (centerX - x) / 10;
+
+          this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(50px)`;
+        });
+      });
+
+      // Typing effect for tagline
+      const tagline = document.querySelector(".tagline");
+      const text = tagline.textContent;
+      tagline.textContent = "";
+      let index = 0;
+
+      function typeWriter() {
+        if (index < text.length) {
+          tagline.textContent += text.charAt(index);
+          index++;
+          setTimeout(typeWriter, 50);
+        }
+      }
+
+      setTimeout(typeWriter, 2000);
+
+      // Smooth scroll for all anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Add glow effect to contact links
+      const contactLinks = document.querySelectorAll(".contact-link");
+      contactLinks.forEach((link) => {
+        link.addEventListener("mouseenter", function () {
+          this.style.boxShadow = `0 0 40px ${
+            Math.random() > 0.5 ? "var(--primary)" : "var(--secondary)"
+          }`;
+        });
+        link.addEventListener("mouseleave", function () {
+          this.style.boxShadow = "";
+        });
+      });
+
+      // Easter egg: Konami code
+      let konamiCode = [
+        "ArrowUp",
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "ArrowLeft",
+        "ArrowRight",
+        "b",
+        "a",
+      ];
+      let konamiIndex = 0;
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === konamiCode[konamiIndex]) {
+          konamiIndex++;
+          if (konamiIndex === konamiCode.length) {
+            activateEasterEgg();
+            konamiIndex = 0;
+          }
+        } else {
+          konamiIndex = 0;
+        }
+      });
+
+      function activateEasterEgg() {
+        document.body.style.animation = "glitch 0.3s infinite";
+        setTimeout(() => {
+          document.body.style.animation = "";
+          alert("🎮 Achievement Unlocked: Code Master! 🎮");
+        }, 3000);
+      }
+
+      // Performance optimization: Throttle scroll events
+      let ticking = false;
+      function updateOnScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            // Update animations based on scroll
+            const scrolled = window.pageYOffset;
+            meshes.forEach((mesh, index) => {
+              mesh.position.y =
+                mesh.position.y + Math.sin(scrolled * 0.001 + index) * 0.05;
+            });
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+      window.addEventListener("scroll", updateOnScroll);
+
+      // Console Easter Egg
+      console.log(
+        "%c Welcome to the Matrix! ",
+        "background: #00ffff; color: #000; font-size: 20px; padding: 10px;"
+      );
+      console.log(
+        "%c You found the secret console! 🚀 ",
+        "color: #ff00ff; font-size: 16px;"
+      );
+      console.log(
+        "%c Connect with me: https://github.com/tas33n ",
+        "color: #ffff00; font-size: 14px;"
+      );
+    </script>
+  </body>
 </html>
